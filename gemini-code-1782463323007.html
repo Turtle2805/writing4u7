@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ms Lê Hằng English - Bài Tập Tương Tác</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #8854C0;
+            --secondary-bg: #FDCB6E;
+            --accent-bg: #00C9A7;
+            --correct: #00D26A;
+            --wrong: #FF4757;
+            --text-color: #2d3436;
+        }
+
+        * { box-sizing: border-box; font-family: 'Nunito', 'Quicksand', sans-serif; }
+
+        body {
+            margin: 0;
+            padding: 15px;
+            background: linear-gradient(-45deg, #8854C0, #FDCB6E, #00C9A7, #ff7675);
+            background-size: 400% 400%;
+            animation: moveGradient 12s ease infinite;
+            min-height: 100vh;
+            color: var(--text-color);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes moveGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 100 100"><text y="30" x="10" font-size="20">⭐</text><text y="80" x="70" font-size="22">🌸</text><text y="40" x="75" font-size="20">☁️</text><text y="85" x="15" font-size="22">🐱</text></svg>');
+            background-size: 140px 140px;
+            opacity: 0.35;
+            z-index: 0;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+            animation: floatingPattern 25s linear infinite;
+        }
+
+        @keyframes floatingPattern {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 140px 280px; }
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 3px dashed #dfe6e9;
+            padding-bottom: 10px;
+        }
+
+        .heading-small {
+            font-size: 0.95em;
+            color: #6c5ce7;
+            font-weight: 800;
+            background: #f1f2f6;
+            padding: 5px 15px;
+            border-radius: 12px;
+            display: inline-block;
+            border: 2px solid #a29bfe;
+        }
+
+        .alert-box {
+            background: #fff3cd;
+            border: 3px dashed #f59f00;
+            padding: 18px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            font-size: 0.98em;
+            color: #856404;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(245, 159, 0, 0.1);
+        }
+
+        .exercise-title {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-weight: 800;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 5px solid #4caf50;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 22px;
+            padding: 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.03);
+            border: 3px solid #f1f2f6;
+            transition: all 0.3s ease;
+        }
+        .card:hover { border-color: #a29bfe; transform: translateY(-2px); }
+
+        .question-text {
+            font-size: 1.15em;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #2d3436;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .btn-opt {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 18px;
+            font-size: 1.05em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 0 #b2bec3;
+            background: #f1f2f6;
+            text-align: left;
+            color: #2d3436;
+            line-height: 1.4;
+        }
+        .btn-opt:hover {
+            transform: scale(1.015);
+            background: #ffeaa7;
+            box-shadow: 0 5px 0 #fdcb6e;
+        }
+        .btn-opt:active { transform: translateY(5px); box-shadow: none !important; }
+
+        .btn-opt.correct {
+            background: var(--correct) !important;
+            color: white !important;
+            box-shadow: 0 5px 0 #00b894 !important;
+        }
+        .btn-opt.wrong {
+            background: var(--wrong) !important;
+            color: white !important;
+            box-shadow: 0 5px 0 #d63031 !important;
+            animation: shakeAnim 0.4s ease;
+        }
+
+        @keyframes shakeAnim {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        .explanation-panel {
+            display: none;
+            margin-top: 15px;
+            padding: 18px;
+            background: #f8f9fa;
+            border-left: 6px solid #00b894;
+            border-radius: 14px;
+            font-size: 0.98em;
+            line-height: 1.7;
+            color: #2d3436;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .submit-bar {
+            position: sticky;
+            bottom: 15px;
+            background: rgba(255,255,255,0.95);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            z-index: 10;
+            margin-top: 40px;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.3em;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #4834d4;
+            transition: all 0.2s;
+        }
+        .btn-submit:hover { filter: brightness(1.08); transform: translateY(-2px); }
+        .btn-submit:active { transform: translateY(6px); box-shadow: none; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-box {
+            background: white;
+            padding: 35px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes modalPop { 0% { transform: scale(0.7); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .modal-box h2 { font-size: 2.2em; color: #6c5ce7; margin-top: 0; }
+        .modal-box p { font-size: 1.15em; font-weight: 700; color: #353b48; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+<div class="bg-pattern"></div>
+
+<div class="container">
+    <header>
+        <div class="heading-small">Giáo viên tạo: Ms Lê Hằng English</div>
+    </header>
+
+    <div class="alert-box">
+        ⚠️ LỜI NHẮC CỰC KỲ QUAN TRỌNG ⚠️<br><br>
+        Chỉ có đọc kỹ giải thích ngay sau mỗi câu, sau đó ghi lại từ vựng/cấu trúc mới vào vở để học thì mới thực sự giỏi lên.<br>
+        Làm cho xong mà không đọc giải thích hay đọc qua loa không ghi chép thì chỉ tốn thời gian vô ích!<br>
+        <strong>* Kéo tới đâu, làm tới đó! *</strong>
+    </div>
+
+    <div id="quiz-container"></div>
+
+    <div class="submit-bar">
+        <button class="btn-submit" onclick="submitExam()">Nộp Bài Tổng Kết Điểm Điểm 🌟</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="result-modal">
+    <div class="modal-box">
+        <h2>Kết Quả Bài Làm</h2>
+        <p id="modal-score" style="font-size: 1.5em; color: #6c5ce7; font-weight: 800;"></p>
+        <p id="modal-comment"></p>
+        <button class="btn-submit" onclick="location.reload()" style="font-size: 1.1em; padding: 12px; margin-top: 15px;">LÀM LẠI BÀI THI</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+    const dataset = [
+        // Exercise 17
+        { ex: "Exercise 17", q: "1. favourite/ My/ song/ country music/ of/ Love Story/ is/.", opts: ["My favourite song of country music is Love Story.", "My song favourite of country music is Love Story.", "Love Story is my song favourite of country music.", "Country music is my favourite song of Love Story."], ans: "My favourite song of country music is Love Story.", t: "Bài hát nhạc đồng quê yêu thích của tôi là Love Story.", g: "Trật tự từ tính từ sở hữu và tính từ chỉ sở thích đứng trước danh từ: My + favourite + song + of + thể loại nhạc." },
+        { ex: "Exercise 17", q: "2. was/ Văn Cao/ a/ composer/ Vietnamese/ great/.", opts: ["Văn Cao was a great Vietnamese composer.", "Văn Cao was great a Vietnamese composer.", "Văn Cao great was a Vietnamese composer.", "A great Vietnamese composer was Văn Cao great."], ans: "Văn Cao was a great Vietnamese composer.", t: "Văn Cao là một nhà soạn nhạc Việt Nam vĩ đại.", g: "Trật tự cụm danh từ: mạo từ (a) + tính từ miêu tả (great) + tính từ quốc tịch (Vietnamese) + danh từ (composer)." },
+        { ex: "Exercise 17", q: "3. compose/ Beethoven/ Did/ Symphony 5/?", opts: ["Did Beethoven compose Symphony 5?", "Did compose Beethoven Symphony 5?", "Beethoven did compose Symphony 5?", "Symphony 5 did compose Beethoven?"], ans: "Did Beethoven compose Symphony 5?", t: "Có phải Beethoven đã sáng tác bản giao hưởng số 5 không?", g: "Trợ động từ câu hỏi quá khứ đơn: Did + Chủ ngữ (Beethoven) + Động từ nguyên thể (compose) + Tân ngữ?" },
+        { ex: "Exercise 17", q: "4. painting/ My/ is/ hers/ impressive/ as/ not/ as/.", opts: ["My painting is not as impressive as hers.", "My painting as impressive is not as hers.", "Hers painting is not as impressive as my.", "My painting is as not impressive as hers."], ans: "My painting is not as impressive as hers.", t: "Bức tranh của tôi không ấn tượng bằng bức tranh của cô ấy.", g: "Cấu trúc so sánh không ngang bằng: S1 + to be + not as + tính từ + as + đại từ sở hữu/S2." },
+        { ex: "Exercise 17", q: "5. music instruments/ the same/ He/ plays/ as/ me/.", opts: ["He plays the same music instruments as me.", "He plays as the same music instruments me.", "He the same plays music instruments as me.", "Me plays the same music instruments as he."], ans: "He plays the same music instruments as me.", t: "Anh ấy chơi những nhạc cụ giống như tôi.", g: "Cấu trúc so sánh giống nhau: Chủ ngữ + động từ + the same + danh từ + as + tân ngữ." },
+        { ex: "Exercise 17", q: "6. different/ Mai’s taste/ is/ her sister’s/ from/.", opts: ["Mai's taste is different from her sister's.", "Mai's taste from is different her sister's.", "Her sister's taste is different Mai's from.", "Mai's taste is different her sister's from."], ans: "Mai's taste is different from her sister's.", t: "Gu thẩm mỹ của Mai khác với gu của chị gái cô ấy.", g: "Cấu trúc tính từ đi với giới từ cố định: be different from (khác với)." },
+        { ex: "Exercise 17", q: "7. difficult/ as/ Playing/ is/ piano/ guitar/ playing/ as/.", opts: ["Playing guitar is as difficult as playing piano.", "Playing guitar is difficult as as playing piano.", "Playing piano as is difficult as playing guitar.", "Guitar playing is as difficult as piano playing."], ans: "Playing guitar is as difficult as playing piano.", t: "Chơi đàn ghi-ta thì khó bằng chơi đàn dương cầm.", g: "Cấu trúc so sánh ngang bằng động danh từ: V-ing + danh từ + is + as + tính từ + as + V-ing + danh từ." },
+        { ex: "Exercise 17", q: "8. horse/ run/ a/ Can/ fast/ as/ a/ as/ train/?", opts: ["Can a horse run as fast as a train?", "Can a train run fast as as a horse?", "A horse can run as fast as a train?", "Can run a horse as fast as a train?"], ans: "Can a horse run as fast as a train?", t: "Một con ngựa có thể chạy nhanh bằng một đoàn tàu không?", g: "Cấu trúc câu hỏi với động từ khuyết thiếu kết hợp so sánh ngang bằng: Can + Chủ ngữ + động từ nguyên thể + as + trạng từ + as + danh từ so sánh?" },
+        { ex: "Exercise 17", q: "9. try/ as/ can/ you/ hard/ as/ should/ You.", opts: ["You should try as hard as you can.", "You as hard should try as you can.", "You should try hard as as you can.", "You can try as hard as you should."], ans: "You should try as hard as you can.", t: "Bạn nên cố gắng hết sức trong khả năng của mình.", g: "Cấu trúc thành ngữ chỉ mức độ tối đa: Chủ ngữ + should + động từ + as + trạng từ + as + mệnh đề (S + can)." },
+        { ex: "Exercise 17", q: "10. Tom’s/ totally/ is/ from/ My/ writing style/ different/.", opts: ["My writing style is totally different from Tom's.", "My style writing is totally different from Tom's.", "Tom's writing style is totally different My from.", "My writing style totally is different from Tom's."], ans: "My writing style is totally different from Tom's.", t: "Phong cách viết của tôi hoàn toàn khác với của Tom.", g: "Trạng từ mức độ đứng trước tính từ để bổ nghĩa: Chủ ngữ + be + totally + different from + Sở hữu cách." },
+        { ex: "Exercise 17", q: "11. car/ same/ runs/ the/ speed/ at/ His/ mine/ as/.", opts: ["His car runs at the same speed as mine.", "His car runs the same speed at as mine.", "His car at the same speed runs as mine.", "Mine car runs at the same speed as his."], ans: "His car runs at the same speed as mine.", t: "Ô tô của anh ấy chạy ở cùng tốc độ với ô tô của tôi.", g: "Cấu trúc so sánh cụm từ cố định: Chủ ngữ + động từ + at the same speed as + đại từ sở hữu." },
+        { ex: "Exercise 17", q: "12. I/ went/ My/ school/ friend/ same/ the/ best/ and/ to/.", opts: ["My best friend and I went to the same school.", "I and my best friend went to the same school.", "My best friend went to the same school and I.", "My best friend and I went the same to school."], ans: "My best friend and I went to the same school.", t: "Bạn thân nhất của tôi và tôi đã học cùng một trường.", g: "Khi liệt kê chủ ngữ phức hợp, ngôi thứ ba đứng trước ngôi thứ nhất: 'My best friend and I'. Cấu trúc: go to the same + danh từ." },
+        { ex: "Exercise 17", q: "13. good/ This/ fridge/ modern/ isn’t/ as/ my/ one/ as/ old/.", opts: ["This modern fridge isn't as good as my old one.", "This modern fridge isn't good as as my old one.", "My old fridge isn't as good as this modern one.", "This fridge modern isn't as good as my old one."], ans: "This modern fridge isn't as good as my old one.", t: "Chiếc tủ lạnh hiện đại này không tốt bằng chiếc tủ lạnh cũ của tôi.", g: "Cấu trúc so sánh không ngang bằng kết hợp cụm danh từ có tính từ đứng trước: This + tính từ + danh từ + isn't as + adj + as + sở hữu cách + danh từ thay thế (one)." },
+        { ex: "Exercise 17", q: "14. Spending time/ isn’t/ with/ as/ computer/ as/ friends/ entertaining/ on/ spending time/.", opts: ["Spending time on computer isn't as entertaining as spending time with friends.", "Spending time with friends isn't as entertaining as spending time on computer.", "Spending time on computer isn't entertaining as as spending time with friends.", "Computer spending time isn't as entertaining as friends spending time."], ans: "Spending time on computer isn't as entertaining as spending time with friends.", t: "Dành thời gian trên máy tính không mang tính giải trí bằng dành thời gian với bạn bè.", g: "So sánh cấu trúc hành động V-ing song song: Spending time on + danh từ + isn't as + tính từ + as + spending time with + danh từ." },
+        { ex: "Exercise 17", q: "15. art gallery /last week. / interesting portraits/ at the / I saw", opts: ["I saw interesting portraits at the art gallery last week.", "I saw at the art gallery interesting portraits last week.", "Last week I saw at the art gallery interesting portraits.", "I interesting portraits saw at the art gallery last week."], ans: "I saw interesting portraits at the art gallery last week.", t: "Tôi đã nhìn thấy những bức chân dung thú vị tại phòng triển lãm nghệ thuật vào tuần trước.", g: "Trật tự câu cơ bản: Chủ ngữ (I) + Động từ (saw) + Tân ngữ (interesting portraits) + Trạng ngữ nơi chốn (at the art gallery) + Trạng ngữ thời gian (last week)." },
+
+        // Exercise 18
+        { ex: "Exercise 18", q: "1. My house is small and old. Your house is spacious and modern. ➔ My house is...", opts: ["different from your house.", "the same as your house.", "as small as your house.", "more modern than your house."], ans: "different from your house.", t: "Nhà của tôi nhỏ và cũ. Nhà của bạn rộng rãi và hiện đại. ➔ Nhà của tôi khác với nhà của bạn.", g: "Sử dụng cụm tính từ 'different from' để chỉ sự khác biệt rõ rệt về đặc điểm giữa hai chủ thể." },
+        { ex: "Exercise 18", q: "2. My mother’s favourite food is noodles. My favourite food is rice. ➔ My mother’s favourite food is...", opts: ["different from my favourite food.", "the same as my favourite food.", "like my favourite food.", "not different from my favourite food."], ans: "different from my favourite food.", t: "Món ăn yêu thích của mẹ tôi là mì. Món ăn yêu thích của tôi là cơm. ➔ Món ăn yêu thích của mẹ tôi khác với món ăn yêu thích của tôi.", g: "Sử dụng 'different from' nối hai cụm danh từ song song để thể hiện hai sở thích ẩm thực đối lập." },
+        { ex: "Exercise 18", q: "3. My best friend has a powerful personality. I have a weak personality. ➔ My best friend’s personality is...", opts: ["different from my personality.", "as weak as my personality.", "the same as my personality.", "like my personality."], ans: "different from my personality.", t: "Bạn thân của tôi có cá tính mạnh mẽ. Tôi có cá tính yếu đuối. ➔ Tính cách của bạn thân tôi khác với tính cách của tôi.", g: "Cấu trúc sở hữu cách so sánh tính cách khác biệt: be + different from." },
+        { ex: "Exercise 18", q: "4. Life in the countryside is quiet and peaceful. Life in the city is exciting. ➔ Life in the countryside is...", opts: ["different from life in the city.", "the same as life in the city.", "as exciting as life in the city.", "like life in the city."], ans: "different from life in the city.", t: "Cuộc sống ở nông thôn thì yên tĩnh và thanh bình. Cuộc sống ở thành phố thì sôi động. ➔ Cuộc sống ở nông thôn khác với cuộc sống ở thành phố.", g: "So sánh hai môi trường sống khác nhau bằng cấu trúc 'different from'." },
+        { ex: "Exercise 18", q: "5. Lan’s school is Hai Ba Trung School. Hue goes to Nguyen Hue School. ➔ Lan’s school is...", opts: ["different from Hue's school.", "the same as Hue's school.", "like Hue's school.", "as big as Hue's school."], ans: "different from Hue's school.", t: "Trường của Lan là trường Hai Bà Trưng. Huệ học trường Nguyễn Huệ. ➔ Trường của Lan khác với trường của Huệ.", g: "Hai ngôi trường có tên gọi hoàn toàn khác nhau nên dùng cấu trúc so sánh khác biệt." },
+        { ex: "Exercise 18", q: "6. My hobby is collecting stamps. My brother’s hobby is playing the piano. ➔ My hobby is...", opts: ["different from my brother's hobby.", "the same as my brother's hobby.", "like my brother's hobby.", "as interesting as my brother's hobby."], ans: "different from my brother's hobby.", t: "Sở thích của tôi là sưu tập tem. Sở thích của anh trai tôi là chơi đàn dương cầm. ➔ Sở thích của tôi khác với sở thích của anh trai tôi.", g: "So sánh hai hành động sở thích (V-ing) khác nhau bằng 'different from'." },
+        { ex: "Exercise 18", q: "7. My answer for this equation is “4” but Tom thinks it should be “5”. ➔ My answer for this equation is...", opts: ["different from Tom's answer.", "the same as Tom's answer.", "like Tom's answer.", "as correct as Tom's answer."], ans: "different from Tom's answer.", t: "Đáp án của tôi cho phương trình này là '4' nhưng Tom nghĩ nó phải là '5'. ➔ Đáp án của tôi cho phương trình này khác với đáp án của Tom.", g: "Hai số liệu kết quả khác nhau (4 và 5) nên đáp án biểu thị sự khác biệt." },
+        { ex: "Exercise 18", q: "8. My sister’s hair is long and wavy. My hair is short and straight. ➔ My sister’s hair is...", opts: ["different from my hair.", "the same as my hair.", "like my hair.", "as short as my hair."], ans: "different from my hair.", t: "Tóc của chị gái tôi dài và xoăn sóng. Tóc của tôi ngắn và thẳng. ➔ Tóc của chị gái tôi khác với tóc của tôi.", g: "Đặc điểm tính chất của hai mái tóc đối nghịch hoàn toàn, dùng cấu trúc 'different from'." },
+        { ex: "Exercise 18", q: "9. This house and your last house are different. ➔ This house is...", opts: ["different from your last house.", "the same as your last house.", "as old as your last house.", "like your last house."], ans: "different from your last house.", t: "Ngôi nhà này và ngôi nhà trước của bạn thật khác nhau. ➔ Ngôi nhà này khác với ngôi nhà trước của bạn.", g: "Tách câu ghép chủ ngữ số nhiều 'A and B are different' thành câu so sánh đơn: A is different from B." },
+        { ex: "Exercise 18", q: "10. Jane and her sister are very different. ➔ Jane is...", opts: ["very different from her sister.", "the same as her sister.", "like her sister.", "as different as her sister."], ans: "very different from her sister.", t: "Jane và em gái cô ấy rất khác nhau. ➔ Jane rất khác với em gái cô ấy.", g: "Giữ nguyên trạng từ chỉ mức độ 'very' đứng trước từ 'different from' để so sánh hai người." },
+        { ex: "Exercise 18", q: "11. Food in San Francisco and food in New Orleans are different. ➔ Food in San Francisco is...", opts: ["different from food in New Orleans.", "the same as food in New Orleans.", "like food in New Orleans.", "as delicious as food in New Orleans."], ans: "different from food in New Orleans.", t: "Ẩm thực ở San Francisco và ẩm thực ở New Orleans rất khác nhau. ➔ Ẩm thực ở San Francisco khác với ẩm thực ở New Orleans.", g: "Chuyển đổi từ câu khẳng định tính chất số nhiều sang cấu trúc so sánh thực tế 'different from'." },
+        { ex: "Exercise 18", q: "12. American English and British English are slightly different. ➔ American English is...", opts: ["slightly different from British English.", "the same as British English.", "slightly different as British English.", "not different from British English."], ans: "slightly different from British English.", t: "Tiếng Anh Mỹ và tiếng Anh Anh hơi khác nhau một chút. ➔ Tiếng Anh Mỹ hơi khác với tiếng Anh Anh.", g: "Trạng từ giảm nhẹ mức độ 'slightly' đứng trực tiếp trước tính từ 'different' trong cấu trúc 'different from'." },
+
+        // Exercise 19
+        { ex: "Exercise 19", q: "1. I’m quite tall but you are taller. ➔ I’m not...", opts: ["as tall as you.", "taller than you.", "as short as you.", "the same height with you."], ans: "as tall as you.", t: "Tôi khá cao nhưng bạn còn cao hơn. ➔ Tôi không cao bằng bạn.", g: "Dùng cấu trúc so sánh không ngang bằng 'not as + adj + as' để diễn đạt ý tương đương câu so sánh hơn." },
+        { ex: "Exercise 19", q: "2. My salary is high, but yours is higher. ➔ My salary isn’t...", opts: ["as high as yours.", "higher than yours.", "as low as yours.", "the same as yours."], ans: "as high as yours.", t: "Lương của tôi cao, nhưng lương của bạn cao hơn. ➔ Lương của tôi không cao bằng lương của bạn.", g: "Cấu trúc phủ định so sánh ngang bằng: 'not as + tính từ + as' để biến đổi từ câu so sánh hơn gốc." },
+        { ex: "Exercise 19", q: "3. You know a bit about cars, but I know more. (As much as) ➔ You don’t know...", opts: ["about cars as much as me.", "about cars as many as me.", "more about cars as me.", "about cars as much than me."], ans: "about cars as much as me.", t: "Bạn biết một chút về xe hơi, nhưng tôi biết nhiều hơn. ➔ Bạn không biết về xe hơi nhiều bằng tôi.", g: "Sử dụng cụm trạng từ định lượng ở thể so sánh ngang bằng: 'as much as' đi sau danh từ bổ ngữ." },
+        { ex: "Exercise 19", q: "4. It’s still cold, but it was colder yesterday. ➔ It isn’t...", opts: ["as cold as it was yesterday.", "colder than it was yesterday.", "as cold yesterday as it is.", "the same cold as yesterday."], ans: "as cold as it was yesterday.", t: "Trời bây giờ vẫn lạnh, nhưng hôm qua còn lạnh hơn. ➔ Thời tiết hôm nay không lạnh bằng ngày hôm qua.", g: "Cấu trúc so sánh trạng thái thời tiết không bằng giữa hiện tại và quá khứ: 'not as + adj + as + mệnh đề quá khứ'." },
+        { ex: "Exercise 19", q: "5. I still feel quite tired, but a lot more tired yesterday. ➔ I don’t...", opts: ["feel as tired as I felt yesterday.", "feel tired as as yesterday.", "feel more tired than yesterday.", "feel as tire as yesterday."], ans: "feel as tired as I felt yesterday.", t: "Hôm nay tôi vẫn thấy khá mệt, nhưng hôm qua còn mệt hơn nhiều. ➔ Tôi không cảm thấy mệt mỏi bằng ngày hôm qua.", g: "Động từ giác quan 'feel' kết hợp tính từ dạng đuôi -ed 'tired' trong cấu trúc so sánh không bằng 'not feel as + adj + as'." },
+        { ex: "Exercise 19", q: "6. Our neighbours have lived here for quite a long time, but we’ve lived here longer. ➔ Our neighbours haven’t lived here...", opts: ["as long as us.", "longer than us.", "as long than us.", "the same long as us."], ans: "as long as us.", t: "Hàng xóm của chúng tôi đã sống ở đây khá lâu rồi, nhưng chúng tôi đã sống ở đây lâu hơn. ➔ Hàng xóm của chúng tôi không sống ở đây lâu bằng chúng tôi.", g: "Trạng từ chỉ thời gian kéo dài 'long' áp dụng trong cấu trúc phủ định so sánh ngang bằng: 'not... as long as'." },
+        { ex: "Exercise 19", q: "7. I was a bit nervous before the interview, but usually I’m a lot more nervous. ➔ I wasn’t...", opts: ["as nervous as I am usually.", "more nervous than usually.", "as nervous than usually.", "the same nervous as usually."], ans: "as nervous as I am usually.", t: "Tôi hơi lo lắng trước buổi phỏng vấn, nhưng thường thì tôi còn lo lắng hơn nhiều. ➔ Tôi đã không lo lắng bằng trạng thái bình thường của tôi.", g: "Cấu trúc: 'not as + tính từ (nervous) + as + mệnh đề hiện tại thường'." },
+        { ex: "Exercise 19", q: "8. I know them better than you do. ➔ You don’t know...", opts: ["them as well as me.", "them as good as me.", "them better than me.", "as well as me them."], ans: "as well as me.", t: "Tôi biết họ rõ hơn bạn biết. ➔ Bạn không biết họ rõ bằng tôi.", g: "Trạng từ 'well' là dạng nguyên thể của tính từ so sánh hơn 'better', được đặt trong cấu trúc 'not as well as'." },
+        { ex: "Exercise 19", q: "9. There are fewer people at this meeting than at the last one. ➔ There aren’t...", opts: ["as many people at this meeting as the last one.", "as few people at this meeting as the last one.", "many people as at this meeting as the last one.", "as much people at this meeting as the last one."], ans: "as many people at this meeting as the last one.", t: "Có ít người ở cuộc họp này hơn cuộc họp trước. ➔ Không có nhiều người tại cuộc họp này bằng cuộc họp trước.", g: "Với danh từ đếm được số nhiều 'people', khi đổi sang cấu trúc so sánh phủ định ngang bằng phải dùng trạng từ định lượng 'many' tạo thành 'not as many + N + as'." },
+        { ex: "Exercise 19", q: "10. I go out less than I used to. ➔ I don’t go out...", opts: ["as much as I used to.", "as many as I used to.", "less than I used to.", "the same as I used to."], ans: "as much as I used to.", t: "Tôi ít đi ra ngoài chơi hơn ngày trước. ➔ Tôi không đi ra ngoài nhiều bằng ngày trước nữa.", g: "Cụm so sánh tần suất hành động ở thể phủ định: 'not... as much as I used to' (không nhiều như trước đây)." },
+
+        // Exercise 20
+        { ex: "Exercise 20", q: "1. This room is larger than the one at the end of the corridor of the art gallery. ➔ The room at the end of the corridor of the art gallery is not...", opts: ["as large as this room.", "larger than this room.", "as small as this room.", "the same size as this room."], ans: "as large as this room.", t: "Căn phòng này rộng hơn căn phòng ở cuối hành lang của triển lãm nghệ thuật. ➔ Căn phòng ở cuối hành lang của triển lãm nghệ thuật không rộng bằng căn phòng này.", g: "Đảo chủ ngữ trong câu so sánh hơn bằng cách sử dụng cấu trúc phủ định của so sánh ngang bằng: 'not as + adj + as'." },
+        { ex: "Exercise 20", q: "2. I think action films are more exciting than romance films. ➔ In my opinion, romance films are not...", opts: ["as exciting as action films.", "more exciting than action films.", "as boring as action films.", "the same as action films."], ans: "as exciting as action films.", t: "Tôi nghĩ phim hành động kịch tính hơn phim lãng mạn. ➔ Theo ý kiến của tôi, phim lãng mạn không kịch tính bằng phim hành động.", g: "Chuyển cấu trúc so sánh hơn của tính từ dài 'more exciting than' thành dạng phủ định so sánh bằng với tính từ giữ nguyên thể." },
+        { ex: "Exercise 20", q: "3. Salvador Dali's paintings are different from Picasso's paintings. ➔ Picasso's paintings are not...", opts: ["the same as Dali's paintings.", "different from Dali's paintings.", "like Dali's paintings.", "as beautiful as Dali's paintings."], ans: "the same as Dali's paintings.", t: "Những bức tranh của Salvador Dali khác với những bức tranh của Picasso. ➔ Những bức tranh của Picasso không giống với những bức tranh của Dali.", g: "Cấu trúc phủ định tương đương nghĩa: 'be different from' đồng nghĩa với 'be not the same as'." },
+        { ex: "Exercise 20", q: "4. My sister sings better than me. ➔ I don't sing...", opts: ["as well as my sister.", "as good as my sister.", "better than my sister.", "as badly as my sister."], ans: "as well as my sister.", t: "Chị gái tôi hát hay hơn tôi. ➔ Tôi không hát hay bằng chị gái tôi.", g: "Động từ thường 'sing' yêu cầu đi kèm với trạng từ 'well'. Dạng phủ định so sánh bằng là 'not sing as well as'." },
+        { ex: "Exercise 20", q: "5. Ballets and modern dance are quite different. ➔ Ballets and modern dance are not...", opts: ["the same.", "different.", "like.", "as different."], ans: "the same.", t: "Ba-lê và khiêu vũ hiện đại khá khác nhau. ➔ Ba-lê và khiêu vũ hiện đại không giống nhau.", g: "Cụm từ diễn đạt sự trái ngược tính chất số nhiều: 'A and B are different' ➔ 'A and B are not the same'." },
+        { ex: "Exercise 20", q: "6. The project was shorter than we thought at first. ➔ The project was not...", opts: ["as long as we thought at first.", "as short as we thought at first.", "longer than we thought at first.", "the same length as we thought at first."], ans: "as long as we thought at first.", t: "Dự án ngắn hơn chúng tôi nghĩ lúc đầu. ➔ Dự án không dài như chúng tôi nghĩ lúc đầu.", g: "Biến đổi câu so sánh hơn với tính từ trái nghĩa: 'shorter than' tương đồng ý nghĩa với 'not as long as'." },
+
+        // Exercise 21
+        { ex: "Exercise 21", q: "1. My hair is short. Your hair is long. (as … as) ➔ My hair isn’t...", opts: ["as long as your hair.", "as short as your hair.", "long as as your hair.", "the same length as your hair."], ans: "as long as your hair.", t: "Tóc của tôi ngắn. Tóc của bạn dài. ➔ Tóc của tôi không dài bằng tóc của bạn.", g: "Kết hợp hai tính từ đối lập bằng cấu trúc phủ định so sánh bằng sử dụng tính từ của đối tượng làm chuẩn." },
+        { ex: "Exercise 21", q: "2. She likes swimming. Her friend likes playing chess. (different from) ➔ Her hobby is...", opts: ["different from her friend's.", "the same as her friend's.", "like her friend's hobby.", "as interesting as her friend's."], ans: "different from her friend's.", t: "Cô ấy thích bơi lội. Bạn của cô ấy thích chơi cờ. ➔ Sở thích của cô ấy khác với sở thích của bạn cô ấy.", g: "Thay thế các hành động cụ thể bằng danh từ tổng quát 'hobby' (sở thích) kết hợp cụm cấu trúc 'different from'." },
+        { ex: "Exercise 21", q: "3. The action films are exciting. The documentary films are sad. (as … as) ➔ The documentary films aren’t...", opts: ["as exciting as the action films.", "as sad as the action films.", "more exciting than the action films.", "the same as the action films."], ans: "as exciting as the action films.", t: "Phim hành động thì sôi động. Phim tài liệu thì buồn. ➔ Phim tài liệu không sôi động bằng phim hành động.", g: "Cấu trúc phủ định so sánh bằng lấy tính từ của chủ thể nổi trội làm căn cứ so sánh." },
+        { ex: "Exercise 21", q: "4. The characters in the play are not like the ones in the story. (different from) ➔ The characters in the play are...", opts: ["different from the ones in the story.", "the same as the ones in the story.", "like the ones in the story.", "not different from the ones in the story."], ans: "different from the ones in the story.", t: "Các nhân vật trong vở kịch không giống các nhân vật trong câu truyện. ➔ Các nhân vật trong vở kịch khác với các nhân vật trong câu truyện.", g: "Cụm cấu trúc biến đổi tương đương: 'not like' đồng nghĩa với tính từ 'different from'." },
+        { ex: "Exercise 21", q: "5. He looks handsome. His father looks handsome. (like) ➔ He looks...", opts: ["handsome like his father.", "handsome as his father.", "handsome from his father.", "the same handsome like his father."], ans: "handsome like his father.", t: "Anh ấy trông đẹp trai. Bố anh ấy trông đẹp trai. ➔ Anh ấy trông đẹp trai giống như bố anh ấy.", g: "Dùng từ 'like' làm trạng từ so sánh đặc điểm ngoại hình tương đồng: 'looks handsome like somebody'." },
+        { ex: "Exercise 21", q: "6. My house is new. Your house is new. (as … as) ➔ My house is...", opts: ["as new as your house.", "new than your house.", "different from your house.", "the same new as your house."], ans: "as new as your house.", t: "Nhà của tôi mới. Nhà của bạn cũng mới. ➔ Nhà của tôi mới bằng nhà của bạn.", g: "Khi hai đối tượng có cùng một tính chất tương đương tuyệt đối, ta dùng cấu trúc khẳng định so sánh bằng: 'as + adj + as'." },
+        { ex: "Exercise 21", q: "7. Jimmy’s voice is more beautiful than Johnny. (as) ➔ Johnny’s voice is not...", opts: ["as beautiful as Jimmy.", "beautifuler than Jimmy.", "as beautiful than Johnny.", "the same beautiful as Jimmy."], ans: "as beautiful as Jimmy.", t: "Giọng của Jimmy hay hơn Johnny. ➔ Giọng của Johnny không hay bằng Jimmy.", g: "Cấu trúc câu biến đổi từ so sánh hơn sang phủ định so sánh bằng: 'not as + tính từ nguyên thể + as'." },
+        { ex: "Exercise 21", q: "8. The plots of the film are not the same as those of the novel. (from) ➔ The plots of the film are...", opts: ["different from the novel.", "the same from the novel.", "like from the novel.", "as interesting from the novel."], ans: "different from the novel.", t: "Cốt truyện của bộ phim không giống với cốt truyện của tiểu thuyết. ➔ Cốt truyện của bộ phim khác với tiểu thuyết.", g: "Yêu cầu sử dụng từ gợi ý tạo cấu trúc khác biệt: 'not the same as' đổi thành danh từ/tính từ + 'different from'." },
+        { ex: "Exercise 21", q: "9. Kien’s presentation was clearer than Mai’s. (not) ➔ Mai’s presentation...", opts: ["was not as clear as Kien's.", "was not clearer than Kien's.", "was clearer not as Kien's.", "was as clear not as Kien's."], ans: "was not as clear as Kien's.", t: "Bài thuyết trình của Kiên rõ ràng hơn của Mai. ➔ Bài thuyết trình của Mai không rõ ràng bằng của Kiên.", g: "Dùng từ phủ định 'not' xây dựng cấu trúc so sánh không bằng: 'was not as clear as'." },
+        { ex: "Exercise 21", q: "10. Mark’s music project is different from mine. (like) ➔ Mark’s music project is...", opts: ["not like mine.", "like mine.", "different like mine.", "the same like mine."], ans: "not like mine.", t: "Dự án âm nhạc của Mark khác với của tôi. ➔ Dự án âm nhạc của Mark không giống của tôi.", g: "Chuyển đổi cấu trúc tương đương nghĩa: từ 'different from' thành cụm phủ định từ so sánh hình thái 'not like'." },
+        { ex: "Exercise 21", q: "11. Pop music attracts more listeners than rock music. (as) ➔ Rock music does not...", opts: ["attract as many listeners as pop music.", "attract as much listeners as pop music.", "attract as listeners as pop music.", "attract more listeners as pop music."], ans: "attract as many listeners as pop music.", t: "Nhạc pop thu hút nhiều người nghe hơn nhạc rock. ➔ Nhạc rock không thu hút nhiều người nghe bằng nhạc pop.", g: "Dùng trợ động từ phủ định câu hiện tại đơn 'does not' kết hợp cụm định lượng danh từ số nhiều 'as many + danh từ số nhiều + as'." },
+
+        // Exercise 22
+        { ex: "Exercise 22", q: "❶ Chọn trật tự đúng để tạo thành một bức thư có nghĩa gửi Long từ các câu cho trước (a-e).", opts: ["d-b-c-a-e", "b-d-c-e-a", "d-c-b-a-e", "a-e-b-d-c"], ans: "d-b-c-a-e", t: "Sắp xếp nội dung thư: d (triển lãm tranh phong cảnh) -> b (thông số số lượng ảnh) -> c (lời mời đi xem) -> a (vị trí gần có thể đi bộ) -> e (chốt thời gian gặp).", g: "Trình tự logic truyền tải thông tin: Giới thiệu sự kiện trước ➔ Chi tiết số lượng ➔ Đưa ra lời mời ➔ Bàn luận cách đi lại ➔ Hẹn giờ giấc gặp mặt cụ thể." },
+        { ex: "Exercise 22", q: "❷ Chọn trật tự đúng để sắp xếp các câu thành một đoạn văn hoàn chỉnh về thể loại nhạc Pop (a-f).", opts: ["e-b-c-d-f-a", "b-c-e-a-d-f", "b-e-c-d-a-f", "b-a-e-c-d-f"], ans: "b-e-c-d-a-f", t: "Sắp xếp đoạn văn: b (giới thiệu sở thích nhạc Pop) -> e (lý do vì bắt tai) -> c (nhịp điệu dễ nhảy, lời dễ hiểu) -> d (giúp thư giãn đầu óc) -> a (hát cùng bạn bè) -> f (chốt câu kết luận lựa chọn hàng đầu).", g: "Trình tự viết đoạn văn học thuật: Câu chủ đề giới thiệu đối tượng ➔ Các câu luận cứ bổ sung nguyên nhân phát triển ý theo cấp độ tăng dần ➔ Câu kết luận khẳng định lại vị trí của đối tượng." },
+
+        // Exercise 23
+        { ex: "Exercise 23", q: "❶ Sắp xếp thứ tự logic đoạn văn (a-c) để điền vào chỗ trống đầu tiên trong văn bản mẫu về nhạc Pop.", opts: ["c - b - a", "a - c - b", "b - a - c", "d - c - a - b"], ans: "c - b - a", t: "Thứ tự sắp xếp mạch văn hợp lý: c (đưa ra dẫn chứng ca sĩ nổi tiếng Taylor Swift/Ed Sheeran) -> b (nêu tính đa dạng thể loại nhanh/chậm) -> a (khẳng định tính ứng dụng trong mọi hoàn cảnh hoàn hảo).", g: "Mạch phát triển ý logic: Đi từ dẫn chứng cụ thể của các nghệ sĩ lớn để làm tiền đề, sau đó mở rộng ra các khía cạnh đặc điểm âm nhạc và cuối cùng chốt bằng tính ứng dụng thực tế." },
+        { ex: "Exercise 23", q: "❷ Chọn câu kết thúc đoạn văn trên một cách phù hợp nhất.", opts: ["I think everyone should try listening to pop music.", "This is why pop music is my favorite genre.", "So, next time you're feeling down, try some pop!", "There are many other types of music I enjoy too."], ans: "So, next time you're feeling down, try some pop!", t: "Chọn câu kết thúc phù hợp: 'Vì vậy, lần tới khi bạn cảm thấy buồn chán, hãy thử nghe một chút nhạc pop xem sao!'", g: "Câu kết phù hợp nhất là câu đưa ra một lời khuyên thiết thực truyền cảm hứng dựa trên luận điểm 'nhạc pop làm tôi thấy hạnh phúc' ở vế trước." },
+        { ex: "Exercise 23", q: "❸ Chọn câu chủ đề mở đầu phù hợp nhất cho văn bản về đàn Piano.", opts: ["Playing the piano is a great way to relax.", "I really want to learn to play the piano.", "Learning a musical instrument requires dedication.", "The piano is a versatile instrument."], ans: "I really want to learn to play the piano.", t: "Chọn câu mở đầu: 'Tôi thực sự rất muốn học chơi đàn dương cầm.'", g: "Câu tiếp theo trong đoạn văn ghi rõ 'I have never played it before...' (Tôi chưa bao giờ chơi nó trước đây) thể hiện ước muốn cá nhân, do đó câu chủ đề chỉ nguyện vọng học là khớp nhất." },
+        { ex: "Exercise 23", q: "❹ Sắp xếp thứ tự các câu (a-c) để hoàn thiện logic phần giữa của văn bản về đàn Piano.", opts: ["a-b-c", "b-a-c", "c-a-b", "a-c-b"], ans: "a-c-b", t: "Thứ tự logic: a (Đó là một trải nghiệm thử thách nhưng xứng đáng) -> c (Nếu bắt đầu học, tôi sẽ tập 30 phút mỗi ngày) -> b (Làm chủ một kỹ năng mới cần thời gian và công sức).", g: "Trình tự liên kết mạch ý: Khẳng định tính chất của việc học đàn (thử thách) ➔ Đưa ra kế hoạch hành động cụ thể để khắc phục thử thách đó ➔ Chốt kết luận triết lý hành động tổng quát." }
+    ];
+
+    // Thuật toán xáo trộn vị trí đáp án ngẫu nhiên để chống học vẹt
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    const quizData = dataset.map((item, index) => {
+        let optionsWithStatus = item.opts.map(o => ({ text: o, isCorrect: o === item.ans }));
+        shuffle(optionsWithStatus);
+        
+        // Build 4-step structured explanation text dynamically
+        let step1 = `<strong>Bước 1: Dịch câu hỏi sang tiếng Việt:</strong><br><em>"${item.q}"</em><br>➔ Nghĩa câu hoàn chỉnh: <strong>${item.t}</strong>`;
+        let step2 = `<br><strong>Bước 2: Phân tích nghĩa các đáp án lựa chọn:</strong><br>`;
+        optionsWithStatus.forEach((opt, idx) => {
+            step2 += `${String.fromCharCode(65 + idx)}. ${opt.text} ${opt.isCorrect ? '(Đáp án đúng)' : '(Đáp án nhiễu)'}<br>`;
+        });
+        let step3 = `<br><strong>Bước 3: Tại sao đáp án này đúng?</strong><br>Vì phương án này sắp xếp từ chuẩn ngữ pháp tiếng Anh: ${item.g}`;
+        let step4 = `<br><strong>Bước 4: Tại sao 3 đáp án còn lại SAI?</strong><br>Vì cấu trúc bị sắp xếp lộn xộn ngữ pháp, dùng sai giới từ liên kết hoặc gây ra sự mâu thuẫn về mặt ngữ nghĩa so với dữ liệu đề bài gốc cung cấp.`;
+        
+        return {
+            id: index + 1,
+            exercise: item.ex,
+            question: item.q,
+            options: optionsWithStatus.map(o => o.text),
+            correctIdx: optionsWithStatus.findIndex(o => o.isCorrect),
+            explanation: `${step1}<br>${step2}${step3}<br>${step4}`
+        };
+    });
+
+    // Tạo bộ giả lập âm thanh Web Audio API chất lượng cao sinh động
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playAudioFeedback(type) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'correct') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1);  // A5
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+            confetti({ particleCount: 60, spread: 50, origin: { y: 0.8 } });
+        } else {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(90, audioCtx.currentTime + 0.4);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+        }
+    }
+
+    let score = 0;
+    const completedQuestions = new Set();
+
+    function renderExam() {
+        const container = document.getElementById('quiz-container');
+        let currentExercise = "";
+
+        quizData.forEach((q, index) => {
+            if (q.exercise !== currentExercise) {
+                currentExercise = q.exercise;
+                const heading = document.createElement('div');
+                heading.className = 'exercise-title';
+                heading.innerText = currentExercise;
+                container.appendChild(heading);
+            }
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            const letters = ['A', 'B', 'C', 'D'];
+
+            card.innerHTML = `
+                <div class="question-text">${q.question}</div>
+                <div class="options-grid" id="grid-${q.id}">
+                    ${q.options.map((opt, i) => `
+                        <button class="btn-opt" onclick="verifyAnswer(${q.id}, ${i}, this)">${letters[i]}. ${opt}</button>
+                    `).join('')}
+                </div>
+                <div class="explanation-panel" id="expl-${q.id}">
+                    ${q.explanation}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    window.verifyAnswer = function(qId, selectedIdx, btn) {
+        if (completedQuestions.has(qId)) return;
+        completedQuestions.add(qId);
+
+        const q = quizData.find(item => item.id === qId);
+        const grid = document.getElementById(`grid-${qId}`);
+        const buttons = grid.getElementsByTagName('button');
+        const explPanel = document.getElementById(`expl-${qId}`);
+
+        if (selectedIdx === q.correctIdx) {
+            btn.classList.add('correct');
+            playAudioFeedback('correct');
+            score++;
+        } else {
+            btn.classList.add('wrong');
+            buttons[q.correctIdx].classList.add('correct');
+            playAudioFeedback('wrong');
+        }
+
+        explPanel.style.display = 'block';
+    }
+
+    window.submitExam = function() {
+        const modal = document.getElementById('result-modal');
+        const scoreText = document.getElementById('modal-score');
+        const commentText = document.getElementById('modal-comment');
+        const rate = (score / quizData.length) * 100;
+
+        scoreText.innerText = `Kết quả của con: ${score} / ${quizData.length} câu đúng`;
+
+        if (rate < 50) {
+            commentText.innerText = "Ms Lê Hằng nhắn nhủ: “Điểm lần này chưa cao lắm, con cố gắng đọc kỹ giải thích đáp án và làm lại nha. Cô tin con sẽ làm tốt hơn ở lần sau!”";
+        } else if (rate <= 80) {
+            commentText.innerText = "Ms Lê Hằng nhắn nhủ: “Con đã có tiến bộ khá ổn rồi, con cố gắng đọc kỹ giải thích đáp án và làm lại nha. Cô tin con sẽ làm tốt hơn ở lần sau!”";
+        } else {
+            commentText.innerText = "Ms Lê Hằng nhắn nhủ: “Làm tốt lắm, con cố gắng ring điểm 10 ở lần sau nha!”";
+            confetti({ particleCount: 200, spread: 80, origin: { y: 0.4 } });
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    renderExam();
+</script>
+</body>
+</html>
